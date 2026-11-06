@@ -1,0 +1,12 @@
+# Raw data (too large for GitHub, see data/README.md)
+data/raw/
+
+# Excel temp / lock files
+~$*.xlsx
+~$*.xlsm
+*.tmp
+
+# OS files
+Thumbs.db
+desktop.ini
+.DS_Store
