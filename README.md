@@ -1,9 +1,9 @@
 # London Housing Market Analysis (2016 to 2026) in Excel
 
 Analysis of residential property sales in London using HM Land Registry Price Paid Data.
-Built in Excel only: Power Query for ETL, Data Model (Power Pivot) with DAX measures, modern formulas (XLOOKUP, LET, LAMBDA, dynamic arrays), what-if analysis and an interactive dashboard.
+Built in Excel only: Power Query for ETL, Data Model (Power Pivot) with DAX measures, modern formulas (XLOOKUP, LET, dynamic arrays), what-if analysis and an interactive dashboard.
 
-> Status: **in progress** (Day 1 of 10). See the [progress log](#progress-log) below.
+> Status: **in progress** (Day 2 of 10). See the [progress log](#progress-log) below.
 
 ---
 
@@ -40,10 +40,10 @@ Raw files are **not** stored in this repo (over 1 GB in total).
 
 ## Tools
 
-- Excel 2024 (desktop, Windows)
+- Excel 2021 (desktop, Windows). Everything also works in Microsoft 365
 - Power Query (M)
 - Data Model / Power Pivot (DAX)
-- Excel formulas: XLOOKUP, LET, LAMBDA, FILTER, SORTBY, UNIQUE
+- Excel formulas: XLOOKUP, XMATCH, LET, FILTER, SORTBY, UNIQUE, SEQUENCE
 - What-if analysis: Data Tables, Scenario Manager, PMT
 
 ## Repository structure
@@ -56,10 +56,12 @@ london-housing-excel-analysis/
 ├── docs/
 │   ├── 01_business_framing.md
 │   ├── data_dictionary.md
-│   └── decision_log.md      every cleaning / modelling decision and why
+│   ├── decision_log.md      every cleaning / modelling decision and why
+│   └── excel_conventions.md formatting and naming rules used in the workbook
 ├── powerquery/              M code for every query, as plain text
 ├── dax/                     DAX measures, as plain text
-├── excel/                   the workbook
+├── excel/
+│   └── london_housing_analysis.xlsx
 └── images/                  screenshots used in this README
 ```
 
@@ -70,11 +72,11 @@ M code and DAX are saved as text files because GitHub can't preview `.xlsx`. Thi
 | Day | Stage | Status |
 |---|---|---|
 | 1 | Business framing, data dictionary, repo setup | done |
-| 2 | Power Query: load and combine yearly files, filter London | |
+| 2 | Power Query: load and combine yearly files, filter London | done |
 | 3 | Power Query: cleaning, data quality log | |
 | 4 | Dimension tables and data model (star schema) | |
 | 5 | DAX measures | |
-| 6 | Formula-based analysis (dynamic arrays, LAMBDA) | |
+| 6 | Formula-based analysis (dynamic arrays, LET) | |
 | 7 | Affordability analysis and mortgage what-if | |
 | 8 | Pivot analysis and charts | |
 | 9 | Dashboard | |
