@@ -31,12 +31,17 @@ Power Query loads **every CSV in this folder** (Day 2), so:
 - don't rename the files
 - don't put any other files in this folder
 
-## 3. Point Power Query at the folder
+## 3. Refresh the workbook
 
-The folder path is stored in one parameter (`p_RawFolder`) on the `Settings` sheet of the workbook. Change it to your own path and click **Data > Refresh All**.
+Open `excel/london_housing_analysis.xlsx` and click **Data > Refresh All**.
+
+The folder path is built automatically from the workbook location (`<repo>\data\raw\`) on the `Settings` sheet.
+If the raw files are somewhere else, type the path into the yellow **override** cell on `Settings`.
+
+A full refresh reads about 1.7 GB of CSV and takes several minutes.
 
 ## Notes
 
-- Data used in this project was downloaded on: _to fill in on Day 2_
+- Data used in this project was downloaded on: 08 November 2026
 - Latest release at that time: 28 October 2026 (data to September 2026)
 - Licence: Open Government Licence v3.0. Contains HM Land Registry data © Crown copyright and database right 2026.
