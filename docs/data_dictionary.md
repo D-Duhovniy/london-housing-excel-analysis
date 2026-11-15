@@ -12,7 +12,7 @@ The `Name in model` column shows the names I use in the workbook.
 | 1 | Transaction unique identifier | `transaction_id` | Text | Unique reference for each sale, in `{GUID}` format | | Yes, key / duplicate check |
 | 2 | Price | `price` | Whole number | Sale price stated on the transfer deed, £ | | Yes |
 | 3 | Date of Transfer | `transfer_date` | Date | Date the sale was completed | Text like `2016-01-01 00:00`. Parsed explicitly in PQ (see D-10) | Yes |
-| 4 | Postcode | `postcode` | Text | Postcode at the time of the sale | Can be blank | Partly (postcode district only) |
+| 4 | Postcode | `postcode` | Text | Postcode at the time of the sale | Can be blank | Replaced by `postcode_district` in `fact_sales` (D-16) |
 | 5 | Property Type | `property_type` | Text (1 char) | Type of property | `D` Detached, `S` Semi-detached, `T` Terraced (incl. end-of-terrace), `F` Flat/Maisonette, `O` Other | Yes |
 | 6 | Old/New | `is_new_build` | Text (1 char) | New build or established | `Y` new build, `N` established | Yes |
 | 7 | Duration | `tenure` | Text (1 char) | Tenure | `F` Freehold, `L` Leasehold | Yes |
@@ -24,7 +24,7 @@ The `Name in model` column shows the names I use in the workbook.
 | 13 | District | `district` | Text | Local authority (in London = borough) | Upper case. 33 values in London (32 boroughs + City of London). Westminster is `CITY OF WESTMINSTER` | Yes, main geography |
 | 14 | County | `county` | Text | | `GREATER LONDON` for London | Yes, filter only |
 | 15 | PPD Category Type | `ppd_category` | Text (1 char) | Type of entry | `A` standard sale at full market value, `B` additional entry (repossessions, buy-to-let with mortgage, sales to companies, property type `O`) | Yes, filter (see D-04) |
-| 16 | Record Status | `record_status` | Text (1 char) | Change flag | `A` added, `C` changed, `D` deleted. Present in yearly files too. In the 2016 file every row is `A` | Checked on all years on Day 2, then dropped |
+| 16 | Record Status | `record_status` | Text (1 char) | Change flag | `A` added, `C` changed, `D` deleted. Present in yearly files too. In the 2016 file every row is `A` | Only `A` in all years (checked on Day 2). Dropped in `fact_sales` |
 
 ## Why some columns are removed
 
@@ -55,3 +55,21 @@ ONS earnings data by borough. Documented when added.
 | London districts | 33 |
 | Category B share in London | 15.7% |
 | `record_status` values | `A` only |
+
+## fact_sales (cleaned table, Day 3)
+
+One row per included sale. Built by `fact_sales` in Power Query.
+
+| Column | Type | Note |
+|---|---|---|
+| `source_file` | Text | Yearly file the row came from (lineage) |
+| `transaction_id` | Text | Unique sale ID |
+| `price` | Whole number | £, at least `p_MinPrice` |
+| `transfer_date` | Date | Between `p_StartDate` and `p_EndDate` |
+| `property_type` | Text | `D`, `S`, `T`, `F` (no `O`) |
+| `is_new_build` | Text | `Y` / `N` |
+| `tenure` | Text | `F` / `L` |
+| `district` | Text | London borough, upper case |
+| `postcode_district` | Text | Outward part of the postcode, e.g. `SW1A`. Blank if the postcode is missing |
+
+Rows removed and why: [data_quality_log.md](data_quality_log.md)

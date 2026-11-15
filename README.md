@@ -3,7 +3,7 @@
 Analysis of residential property sales in London using HM Land Registry Price Paid Data.
 Built in Excel only: Power Query for ETL, Data Model (Power Pivot) with DAX measures, modern formulas (XLOOKUP, LET, dynamic arrays), what-if analysis and an interactive dashboard.
 
-> Status: **in progress** (Day 2 of 10). See the [progress log](#progress-log) below.
+> Status: **in progress** (Day 3 of 10). See the [progress log](#progress-log) below.
 
 ---
 
@@ -56,6 +56,7 @@ london-housing-excel-analysis/
 ├── docs/
 │   ├── 01_business_framing.md
 │   ├── data_dictionary.md
+│   ├── data_quality_log.md  rows removed by each cleaning rule
 │   ├── decision_log.md      every cleaning / modelling decision and why
 │   └── excel_conventions.md formatting and naming rules used in the workbook
 ├── powerquery/              M code for every query, as plain text
@@ -73,7 +74,7 @@ M code and DAX are saved as text files because GitHub can't preview `.xlsx`. Thi
 |---|---|---|
 | 1 | Business framing, data dictionary, repo setup | done |
 | 2 | Power Query: load and combine yearly files, filter London | done |
-| 3 | Power Query: cleaning, data quality log | |
+| 3 | Power Query: cleaning, data quality log | done |
 | 4 | Dimension tables and data model (star schema) | |
 | 5 | DAX measures | |
 | 6 | Formula-based analysis (dynamic arrays, LET) | |

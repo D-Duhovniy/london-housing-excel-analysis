@@ -8,8 +8,8 @@ If someone asks "why is your number different from X?", the answer should be her
 | D-01 | 1 | Use HM Land Registry Price Paid Data, yearly files | Official, free, updated monthly, every sale in England and Wales. Better than Kaggle datasets that are old or synthetic | |
 | D-02 | 1 | Limit to Greater London (`county = "GREATER LONDON"`) | Business question is about London. Keeps the model at around 1M rows instead of 10M+ | Filter applied in Power Query |
 | D-03 | 1 | Period Jan 2016 to **Jul 2026**, not Sep 2026 | Latest release (28 Oct 2026) includes data to Sep 2026, but sales take up to 2 months to be registered. Aug and Sep 2026 would look like a drop in sales that didn't really happen | Aug to Sep 2026 excluded |
-| D-04 | 1 | Use only PPD category `A` | Category B mixes repossessions, company purchases and buy-to-let with a mortgage, and HMLR doesn't say which is which. Category A gives like-for-like market sales. Category B row count will be reported in the data quality log | Planned for Day 3 |
-| D-05 | 1 | Exclude property type `O` (Other) | Not a normal home (e.g. several parcels of land), prices are not comparable | Planned for Day 3 |
+| D-04 | 1 | Use only PPD category `A` | Category B mixes repossessions, company purchases and buy-to-let with a mortgage, and HMLR doesn't say which is which. Category A gives like-for-like market sales. Category B row count is reported in the data quality log | Applied on Day 3 (`int_sales_flagged`) |
+| D-05 | 1 | Exclude property type `O` (Other) | Not a normal home (e.g. several parcels of land), prices are not comparable | Applied on Day 3 (`int_sales_flagged`) |
 | D-06 | 1 | Use median, not mean, as the main price KPI | London prices are heavily right-skewed. A few very expensive sales in Westminster or Kensington move the mean a lot | |
 | D-07 | 1 | Do not store raw data in the repo | Files are large (100+ MB each). Download steps are in `data/README.md` so anyone can rebuild the workbook | |
 | D-08 | 1 | Build for Excel 2021 compatibility: no LAMBDA, VSTACK, TEXTSPLIT, GROUPBY | This is the version I have. A workbook built for 2021 also opens and works in Microsoft 365, the reverse is not true | Reusable logic done with LET and named ranges instead of LAMBDA |
@@ -18,6 +18,10 @@ If someone asks "why is your number different from X?", the answer should be her
 | D-11 | 2 | Filter to London and drop address columns inside the per-file function, before combining files | About 88% of rows are outside London. Dropping them first makes refresh faster and uses less memory | `fx_LoadPricePaidFile` |
 | D-12 | 2 | Keep the source file name on every row (`source_file`) | Lineage: any row can be traced back to its file | Column in `stg_sales` |
 | D-13 | 2 | Read Power Query parameters from named cells on the `Settings` sheet. Raw folder path is built from the workbook location | Anyone who clones the repo can refresh without editing queries | `p_RawFolder` |
+| D-14 | 3 | Exclude sales below £10,000 (`p_MinPrice`). Keep very expensive sales | A London home for less than £10k is not a normal market sale (data error, garage space, share of a property). Very high prices (£10m+) are real sales in central London. They don't distort the median, so they stay | Threshold is a parameter on `Settings`, can be changed and refreshed |
+| D-15 | 3 | Flag first, filter after: every row gets one `dq_reason`, rules checked in a fixed order (period, category, property type, price) | Shows how many rows each rule removes without reading the files again. A row that breaks several rules is counted once, under the first one | `int_sales_flagged`, data quality log |
+| D-16 | 3 | Replace full postcode with postcode district (`SW1A 1AA` -> `SW1A`) | Full postcode is almost unique per sale and would make the Data Model much bigger. District is enough for local analysis | `fact_sales` |
+| D-17 | 3 | Check duplicate `transaction_id` in the Data Model on Day 4, not in Power Query | A duplicate check in Power Query needs a group or join over ~1.2M rows on every refresh. In the Data Model it is one DAX formula on data that is already loaded | Planned for Day 4 |
 
 ## Resolved questions (Day 1 checks)
 
